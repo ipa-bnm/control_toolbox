@@ -36,6 +36,7 @@
 
 #include <vector>
 #include <string>
+#include <std_srvs/Trigger.h>
 #include "ros/node_handle.h"
 #include "control_toolbox/pid.h"
 #include "control_toolbox/SetPidGains.h"
@@ -97,9 +98,13 @@ public:
   bool setGains(control_toolbox::SetPidGains::Request &req,
                 control_toolbox::SetPidGains::Response &resp);
 
+  bool reset(std_srvs::TriggerRequest &req,
+             std_srvs::TriggerResponse &resp);
+
 private:
   ros::NodeHandle node_;
   ros::ServiceServer serve_set_gains_;
+  ros::ServiceServer serve_reset_;
   std::vector<Pid*> pids_;
 };
 

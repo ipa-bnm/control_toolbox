@@ -47,6 +47,7 @@ void PidGainsSetter::advertise(const ros::NodeHandle &n)
 {
   node_ = n;
   serve_set_gains_ = node_.advertiseService("set_gains", &PidGainsSetter::setGains, this);
+  serve_reset_ = node_.advertiseService("reset", &PidGainsSetter::reset, this);
 }
 
 bool PidGainsSetter::setGains(control_toolbox::SetPidGains::Request &req,
@@ -60,6 +61,13 @@ bool PidGainsSetter::setGains(control_toolbox::SetPidGains::Request &req,
   node_.setParam("i_clamp", req.i_clamp);
   node_.setParam("antiwindup", req.antiwindup);
   return true;
+}
+
+bool PidGainsSetter::reset(std_srvs::TriggerRequest &req,
+                                std_srvs::TriggerResponse &resp)
+{
+  for (size_t i = 0; i < pids_.size(); ++i)
+    pids_[i]->reset();
 }
 
 }
